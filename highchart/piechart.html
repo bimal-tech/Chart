@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade Wise Ratio</title>
+    <style>
+        .highcharts-figure,
+        .highcharts-data-table table {
+            min-width: 40vw;
+            max-width: 40vh;
+            margin: 1em auto;
+        }
+    </style>
+</head>
+
+<body>
+    <figure class="highcharts-figure">
+        <div id="container"></div>
+    </figure>
+
+    <script src="../highchart/highchart.min.js"></script>
+
+    <script>
+        Highcharts.chart('container', {
+
+            chart: {
+                type: 'pie'
+            },
+
+            title: {
+                text: 'Gradewise Ratio',
+                align: 'center'
+            },
+
+            tooltip: {
+                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.percentage:.2f}%</b> of total<br/>'
+            },
+
+            plotOptions: {
+                series: {
+                    borderRadius: 5,
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.name}: ({point.y})'
+                    }
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                name: 'Browsers',
+                colorByPoint: true,
+                data: [{
+                        name: 'NG',
+                        y: 11,
+                    },
+                    {
+                        name: 'A',
+                        y: 3,
+                    },
+                    {
+                        name: 'A+',
+                        y: 0,
+                    },
+                    {
+                        name: 'B',
+                        y: 8,
+                    },
+                    {
+                        name: 'B+',
+                        y: 8,
+                    },
+                    {
+                        name: 'C',
+                        y: 7,
+                    },
+                    {
+                        name: 'C+',
+                        y: 3,
+                    },
+                    {
+                        name: 'D',
+                        y: 1,
+                    }
+                ]
+            }]
+        });
+    </script>
+
+</body>
+
+</html>

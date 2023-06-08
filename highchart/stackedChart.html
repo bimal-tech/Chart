@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GenderWise</title>
+    <style>
+        .highcharts-figure,
+        .highcharts-data-table table {
+            min-width: 20vw;
+            max-width: 30vh;
+            margin: 1em auto;
+        }
+    </style>
+</head>
+
+<body>
+    <figure class="highcharts-figure">
+        <div id="container"></div>
+    </figure>
+
+    <script src="../highchart/highchart.min.js"></script>
+
+    <script>
+        Highcharts.chart('container', {
+
+            chart: {
+                type: 'column'
+            },
+
+            title: {
+                text: 'Genderwise Pass Fail Ratio',
+                align: 'left'
+            },
+
+            xAxis: {
+                categories: ['Male', 'Female']
+            },
+
+            yAxis: {
+                allowDecimals: false,
+                min: 0,
+                title: {
+                    text: 'Number of students'
+                }
+            },
+
+            tooltip: {
+                format: '<b>{key}</b><br/>{series.name}: {y}<br/>' +
+                    'Total: {point.stackTotal}'
+            },
+
+            plotOptions: {
+                column: {
+                    stacking: 'normal'
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                name: 'Pass',
+                data: [5, 4],
+                // male pass and female pass
+
+            }, {
+                name: 'Fail',
+                data: [4, 15],
+                // male fail and female fail
+
+            }]
+        });
+    </script>
+
+</body>
+
+</html>
