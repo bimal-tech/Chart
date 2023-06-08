@@ -2,4 +2,4 @@
 
 ## Doughnut chart
 
-![Screenshot](doughnut.png)
+![Screenshot](doughnutChart.png)
