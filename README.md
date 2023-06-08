@@ -1,5 +1,5 @@
 # Chart
 
-##Doughnut chart
+## Doughnut chart
 
 ![Screenshot](doughnut.png)
