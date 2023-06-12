@@ -10,9 +10,9 @@ function loadcanvas(canvas_id, canvas_width, atl, cp, ath) {
     var line_type_2_params = [0.06, 0.8];
     var line_type_3_params = [0.15, 0.47, 0.67, 0.6, 0.65];
 
-    line1(ctx, 35, canvas_width, line_height, atl, cp, ath, line_type_1_params);
-    line2(ctx, 60, canvas_width, line_height, atl, ath, cp, line_type_2_params);
-    line3(ctx, 85, canvas_width, line_height, atl, cp, ath, line_type_3_params);
+    // line1(ctx, 35, canvas_width, line_height, atl, cp, ath, line_type_1_params);
+    line2(ctx, 60, canvas_width, line_height, atl, ath, cp);
+    // line3(ctx, 85, canvas_width, line_height, atl, cp, ath, line_type_3_params);
 }
 
 function line1(ctx, height, width, line_height, atl, cp, ath, line_params) {
@@ -27,48 +27,30 @@ function line1(ctx, height, width, line_height, atl, cp, ath, line_params) {
 
 }
 
-function line2(ctx, height, width, line_height, atl, ath, cp, line_params) {
+function line2(ctx, height, width, line_height, atl, ath, cp) {
     ctx.font = 'bold 11pt Times New Roman';
     ctx.fillStyle = "black";
     ctx.fillText('$' + atl, 0, (height + line_height * 0.25));
     ctx.setLineDash([5, 0]);
     ctx.beginPath();
 
-    if (diff_atl_ath_cp(atl, cp, ath) == 0) {
-        // Less than 50%
-        ctx.moveTo(width - width * 0.9, height);
-        ctx.lineTo(width - width / 1.45, height);
-        ctx.stroke();
 
-        let position = 0.34;
-        ctx.fillText('$' + Number(cp).toFixed(2), width * position, (height + line_height * 0.25));
+    let atl_cp_line_difference = width * (0.97 - (atl.length - 1) / 100);
+    ctx.moveTo(width - atl_cp_line_difference, height);
+    ctx.lineTo(width - width / 1.7, height);
+    ctx.stroke();
+    let position = 0.42;
+    ctx.fillText('$' + Number(cp).toFixed(2), width * position, (height + line_height * 0.25));
+    ctx.beginPath();
 
-        ctx.beginPath();
-        ctx.moveTo(width - width / 1.9, height);
-        ctx.lineTo(width - width * 0.22, height);
-        ctx.stroke();
-    } else {
-        // Greater than 50 %
-        ctx.moveTo(width - width * 0.9, height);
-        ctx.lineTo(width - width / 1.84, height);
-        ctx.stroke();
+    cp = Number(cp).toFixed(2);
+    let cp_ath_line_difference = width * (0.49 - (cp.length - 6) / 100);
 
-        let position = 0.48;
-        ctx.fillText('$' + Number(cp).toFixed(2), width * position, (height + line_height * 0.25));
 
-        ctx.beginPath();
-        ctx.moveTo(width - width / 2.25, height);
-        ctx.lineTo(width - width * 0.22, height);
-        ctx.stroke();
-    }
-
-    var ath_length = ath.toString().length;
-    if (ath_length < 5) {
-        ctx.fillText('$' + Number(ath).toFixed(2), (width * line_params[1]), (height + line_height * 0.25));
-    } else {
-
-        ctx.fillText('$' + Number(ath).toFixed(2), (width * line_params[1]), (height + line_height * 0.25));
-    }
+    ctx.moveTo(width - cp_ath_line_difference, height);
+    ctx.lineTo(width - width * 0.21, height);
+    ctx.stroke();
+    ctx.fillText('$' + Number(ath).toFixed(2), (width * 0.8), (height + line_height * 0.25));
 
 }
 
