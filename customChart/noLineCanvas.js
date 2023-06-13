@@ -30,24 +30,63 @@ function line2(ctx, height, width, line_height, atl, ath, cp) {
     ctx.fillText('$' + atl, 0, (height + line_height * 0.25));
     ctx.setLineDash([5, 0]);
     ctx.beginPath();
-    let atl_cp_line_difference = width * (0.94 - (atl.toString().length - 1) / 100);
-    ctx.moveTo(width - atl_cp_line_difference, height);
-    ctx.lineTo(width - width / 1.7, height);
+    let atl_cp_line_difference = getline1starting(atl, width);
+    ctx.moveTo(atl_cp_line_difference, height);
+    ctx.lineTo(getline1ending(width), height);
     ctx.stroke();
     let position = 0.42;
     ctx.fillText('$' + Number(cp).toFixed(2), width * position, (height + line_height * 0.25));
     ctx.beginPath();
 
     cp = Number(cp).toFixed(2);
-    let cp_ath_line_difference_starting = width * (0.47 - (cp.toString().length - 3) / 100);
-    ctx.moveTo(width - cp_ath_line_difference_starting, height);
+    let cp_ath_line_difference_starting = getline2starting(cp, width);
+
+    ctx.moveTo(cp_ath_line_difference_starting, height);
 
     ath = Number(ath).toFixed(2);
-    let cp_ath_line_difference_ending = width * (0.16 + (ath.toString().length - 4) / 100);
-    ctx.lineTo(width - cp_ath_line_difference_ending, height);
+    let cp_ath_line_difference_ending = getline2ending(ath, width);
+    ctx.lineTo(cp_ath_line_difference_ending, height);
     ctx.stroke();
-    ctx.fillText('$' + ath, (width - cp_ath_line_difference_ending + 4), (height + line_height * 0.25));
+    ctx.fillText('$' + ath, (cp_ath_line_difference_ending + 4), (height + line_height * 0.25));
 
+}
+
+function getline1starting(atl, width) {
+    return width * (1 - (0.94 - (atl.toString().length - 1) / 100));
+}
+
+function getline1ending(width) {
+    return width - width / 1.7;
+}
+
+function getline2starting(cp, width) {
+    let cp_ath_line_difference_starting = 0;
+    switch (cp.toString().length) {
+        case 4:
+            cp_ath_line_difference_starting = width * (1 - 0.49);
+            break;
+        case 5:
+            cp_ath_line_difference_starting = width * (1 - 0.47);
+            break;
+        case 6:
+            cp_ath_line_difference_starting = width * (1 - 0.45);
+            break;
+        case 7:
+            cp_ath_line_difference_starting = width * (1 - 0.43);
+            break;
+        case 8:
+            cp_ath_line_difference_starting = width * (1 - 0.41);
+            break;
+        default:
+            cp_ath_line_difference_starting = width * (1 - (0.40 - (cp.toString().length - 8) / 100));
+            break;
+    }
+    return cp_ath_line_difference_starting;
+}
+
+
+function getline2ending(ath, width) {
+    return width * (1 - (0.16 + (ath.toString().length - 4) / 100));
 }
 
 function line3(ctx, height, width, line_height, atl, cp, ath, line_params) {
@@ -65,7 +104,26 @@ function line3(ctx, height, width, line_height, atl, cp, ath, line_params) {
 
 function current_price_circle(ctx, height, width, line_height, atl, cp, ath) {
     ctx.beginPath();
-    ctx.arc(diff_for_circle(atl, cp, ath) * width, (height + line_height * 0.0), 4, 0, 2 * Math.PI);
+    let line1_start = getline1starting(atl, width);
+    let line1_end = getline1ending(width);
+    let line2_start = getline2starting(cp, width);
+    let line2_end = getline2ending(ath, width);
+    let percentage_position = diff_for_circle(atl, cp, ath);
+    let x_position = (percentage_position * (line2_end - line1_start)) + line1_start;
+    let x = x_position;
+    if (x_position > line1_end && x_position < line2_start) {
+        if ((x_position - line1_end) > (line2_start - x_position)) {
+            x = line2_start + 16;
+        } else {
+            x = line1_end - 4;
+        }
+    }
+    if (percentage_position == 1) {
+        x = line2_end - 16;
+    }
+
+
+    ctx.arc(x, (height + line_height * 0.03), 4, 0, 2 * Math.PI);
     ctx.fillStyle = 'black';
     ctx.stroke();
     ctx.fill();
@@ -131,25 +189,6 @@ function diff_atl_ath_cp(atl, cp, ath) {
 }
 
 function diff_for_circle(atl, cp, ath) {
-    // ath = Number(ath).toFixed(2);
-
-    // if (cp == 0 || cp == atl) {
-    //     return 0.08;
-    // }
-    // if (cp == ath || ath - cp < 1) {
-    //     let cp_ath_line_difference_ending = (0.16 + (ath.toString().length - 4) / 100);
-    //     return 1 - cp_ath_line_difference_ending - 0.01;
-    // }
-
-    if (cp == 0) {
-        return 1.02 - (0.94 - (atl.toString().length - 1) / 100);
-    }
-    let diff = (ath - atl - cp + atl) / (ath - atl);
-    if (diff > 0.8) {
-        return 1 - (0.16 + (ath.toString().length - 2) / 100);
-    }
-    if (diff < 0.2) {
-        return (0.94 - (atl.toString().length - 1) / 100);
-    }
+    let diff = cp / ath;;
     return diff;
 }
